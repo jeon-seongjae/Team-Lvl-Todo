@@ -2,9 +2,11 @@
 
 ### Backend
 - Nest.js (Node.js)
+- TypeScript
 
 ### Frontend
 - Next.js (React.js)
+- TypeScript
 
 ### Features
 - 로그인, 로그아웃 (JWT)
