@@ -1,2 +1,18 @@
 # Team-Lvl-Todo
-First Project
+
+### Backend
+- Nest.js (Node.js)
+
+### Frontend
+- Next.js (React.js)
+
+### Features
+- 로그인, 로그아웃 (JWT)
+- TODO 추가
+- TODO 삭제
+- TODO 필터 (전체, 활성화된 TODO, 완료된 TODO)
+
+### Contributors
+- 전성재 (Backend)
+- 이한종 (Frontend)
+- 정병훈 (Frontend)
