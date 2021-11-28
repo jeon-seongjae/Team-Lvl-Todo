@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const Todo: React.FC = () => {
-  return <div>Todo</div>;
-};
+  return <div>Todo</div>
+}
 
-export default Todo;
+export default Todo

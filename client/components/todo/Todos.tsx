@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const Todos: React.FC = () => {
-  return <div>Todos</div>;
-};
+  return <div>Todos</div>
+}
 
-export default Todos;
+export default Todos
