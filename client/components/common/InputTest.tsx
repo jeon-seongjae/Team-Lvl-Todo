@@ -21,27 +21,29 @@ const InputTest: React.FC = () => {
     console.log('id : ', id, 'password : ', password)
   }
   return (
-    <form onSubmit={onSubmit}>
-      <Form.Field>
-        <InputComponent
-          color="primary"
-          label="ID"
-          type="text"
-          value={id}
-          onChange={onChangeId}
-        />
-        <InputComponent
-          color="primary"
-          label="Password"
-          type="password"
-          value={password}
-          onChange={onChangePassword}
-        />
-        <ButtonComponent submit={true} color="info">
-          Submit
-        </ButtonComponent>
-      </Form.Field>
-    </form>
+    <div style={{padding: '1rem'}}>
+      <form onSubmit={onSubmit}>
+        <Form.Field>
+          <InputComponent
+            color="primary"
+            label="ID"
+            type="text"
+            value={id}
+            onChange={onChangeId}
+          />
+          <InputComponent
+            color="primary"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={onChangePassword}
+          />
+          <ButtonComponent submit={true} color="info">
+            Submit
+          </ButtonComponent>
+        </Form.Field>
+      </form>
+    </div>
   )
 }
 
