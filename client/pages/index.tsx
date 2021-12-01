@@ -1,12 +1,10 @@
 import {NextPage} from 'next'
-import ButtonTest from '../components/common/ButtonTest'
-import InputTest from '../components/common/InputTest'
+import CommonTest from '../components/common/CommonTest'
 
 const Home: NextPage = () => {
   return (
     <>
-      <ButtonTest />
-      <InputTest />
+      <CommonTest />
     </>
   )
 }
