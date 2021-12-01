@@ -14,7 +14,7 @@ import {
 import { Todo } from './Todo';
 
 @Index('email', ['email'], { unique: true })
-@Entity({ schema: 'todo', name: 'users' })
+@Entity({ schema: 'Todo', name: 'users' })
 export class Users {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -28,9 +28,6 @@ export class Users {
   @Column('varchar', { name: 'nickname', length: 30 })
   nickname: string;
 
-  @Column('varchar')
-  name: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -40,6 +37,6 @@ export class Users {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @OneToMany()
+  @OneToMany(() => Todo, (todo) => todo.users)
   todo: Todo[];
 }
