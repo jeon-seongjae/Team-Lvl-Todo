@@ -19,19 +19,19 @@ export class TodoController {
 
   @ApiOperation({ summary: 'Todo 생성' })
   @Post()
-  create(@Body() createTodoDto: CreateTodoDto) {
+  createTodo(@Body() createTodoDto: CreateTodoDto) {
     return this.todoService.create(createTodoDto);
   }
 
   @ApiOperation({ summary: '전체 Todo 리스트' })
   @Get()
-  findAll() {
+  findAllTodo() {
     return this.todoService.findAll();
   }
 
   @ApiOperation({ summary: '선택한 Todo 리스트' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOneTodo(@Param('id') id: string) {
     return this.todoService.findOne(+id);
   }
 
