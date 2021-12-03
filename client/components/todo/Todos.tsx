@@ -1,7 +1,12 @@
 import React from 'react'
+import Input from './Input'
 
 const Todos: React.FC = () => {
-  return <div>Todos</div>
+  return (
+    <>
+      <Input />
+    </>
+  )
 }
 
 export default Todos
