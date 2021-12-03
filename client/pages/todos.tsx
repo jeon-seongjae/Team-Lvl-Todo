@@ -1,7 +1,8 @@
-import type {NextPage} from 'next'
+import {NextPage} from 'next'
+import Todos from '../components/todo/Todos'
 
-const Todos: NextPage = () => {
-  return <h1>TODO</h1>
+const todos: NextPage = () => {
+  return <Todos />
 }
 
-export default Todos
+export default todos
