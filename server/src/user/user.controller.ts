@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,7 +19,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDto } from 'src/common/dto/user.dto';
+import { User } from 'src/common/decorators/user.decorator';
+import { undefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
 
+@UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('USER')
 @Controller('user')
 export class UserController {
@@ -26,8 +30,8 @@ export class UserController {
 
   @ApiOperation({ summary: '회원가입' })
   @Post()
-  signUp(@Body() data: CreateUserDto) {
-    return this.userService.create(data.email, data.nickname, data.password);
+  async signUp(@Body() data: CreateUserDto) {
+    await this.userService.createUser(data.email, data.nickname, data.password);
   }
 
   @ApiOkResponse({
@@ -35,8 +39,8 @@ export class UserController {
   })
   @ApiOperation({ summary: '내 정보 조회' })
   @Get()
-  getUserInfo(@Param('nickname') id: string) {
-    return this.userService.findOne(+id);
+  getUserInfo(@User() user) {
+    return this.userService.findOne(user);
   }
 
   @ApiOperation({ summary: '업데이트' })
@@ -57,7 +61,9 @@ export class UserController {
   })
   @ApiOperation({ summary: '로그인' })
   @Post('login')
-  login() {}
+  login(@User() user) {
+    return user;
+  }
 
   @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
