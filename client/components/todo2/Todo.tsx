@@ -1,13 +1,12 @@
 import React from 'react'
-import 'bulma/css/bulma.min.css'
 import {Button as BButton} from 'react-bulma-components'
 import {Form as BForm} from 'react-bulma-components'
 import {ITodo} from '../../types/todo2'
 
 interface IProps {
-  todo: ITodo;
-  handleRemoveTodo: Function;
-  handleToggleTodo: Function;
+  todo: ITodo
+  handleRemoveTodo: Function
+  handleToggleTodo: Function
 }
 
 const Todo: React.FC<IProps> = ({todo, handleRemoveTodo, handleToggleTodo}) => {

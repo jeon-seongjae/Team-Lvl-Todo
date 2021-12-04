@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
-import 'bulma/css/bulma.min.css'
 import {Form as BForm} from 'react-bulma-components'
 
 interface IProps {
-  handleAddTodo: Function;
+  handleAddTodo: Function
 }
 
 const Input: React.FC<IProps> = ({handleAddTodo}) => {

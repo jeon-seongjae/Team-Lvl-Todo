@@ -2,7 +2,6 @@ import React, {useState, useRef, useCallback} from 'react'
 import {ITodo} from '../../types/todo2'
 import Todo from './Todo'
 import Input from './TodoInput'
-import 'bulma/css/bulma.min.css'
 import {Panel as BPanel} from 'react-bulma-components'
 
 const Todos: React.FC = () => {
