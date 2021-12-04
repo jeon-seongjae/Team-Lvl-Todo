@@ -1,11 +1,12 @@
-import React, {useState, useRef, useCallback} from 'react'
+import React, {useState, useRef, useCallback, useMemo} from 'react'
 import {ITodo} from '../../types/todo2'
-import Todo from './Todo'
-import Input from './TodoInput'
+import {TabType} from '../../enums/todo2'
+import {Todo, TodoInput, TodoTabs} from './'
 import {Panel as BPanel} from 'react-bulma-components'
 
 const Todos: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([])
+  const [tabType, setTabType] = useState(TabType.ALL)
   const nextId = useRef(1)
 
   const handleAddTodo = useCallback(
@@ -45,13 +46,29 @@ const Todos: React.FC = () => {
     setTodos(updatedTodos)
   }
 
+  const handleClickTab = (type: TabType) => {
+    setTabType(type)
+  }
+
+  const filteredTodos = useMemo(() => {
+    switch (tabType) {
+      case TabType.TODO:
+        return todos.filter(todo => todo.done === false)
+      case TabType.DONE:
+        return todos.filter(todo => todo.done === true)
+    }
+
+    return todos
+  }, [todos, tabType])
+
   return (
     <BPanel color="primary">
       <BPanel.Header>Todos</BPanel.Header>
       <BPanel.Block>
-        <Input handleAddTodo={handleAddTodo} />
+        <TodoInput handleAddTodo={handleAddTodo} />
       </BPanel.Block>
-      {todos.map(todo => (
+      <TodoTabs type={tabType} handleClickTab={handleClickTab} />
+      {filteredTodos.map(todo => (
         <BPanel.Block key={todo.id}>
           <Todo
             todo={todo}
