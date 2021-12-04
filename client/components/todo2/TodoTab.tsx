@@ -9,7 +9,7 @@ interface IProps {
 
 const TodoTab: React.FC<IProps> = ({children, active, handleClick}) => {
   return (
-    <BPanel.Tabs.Tab active={active} onClick={() => handleClick}>
+    <BPanel.Tabs.Tab active={active} onClick={() => handleClick()}>
       {children}
     </BPanel.Tabs.Tab>
   )
