@@ -26,7 +26,7 @@ const Todo: React.FC<IProps> = ({todo, handleRemoveTodo, handleToggleTodo}) => {
         onChange={handleToggleCheckbox}
       >
         {todo.text}
-        <BButton onClick={handleClickRemoveButton} remove />
+        <BButton className="ml-2" onClick={handleClickRemoveButton} remove />
       </BForm.Checkbox>
     </div>
   )
