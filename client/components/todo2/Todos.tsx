@@ -1,10 +1,11 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useRef, useCallback} from 'react'
 import {ITodo} from '../../types/todo2'
 import Todo from './Todo'
 import Input from './TodoInput'
 
 const Todos: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([])
+  const nextId = useRef(1)
   
   const handleAddTodo = useCallback(
     (text: string) => {
@@ -13,11 +14,12 @@ const Todos: React.FC = () => {
       }
 
       const todo: ITodo = {
-        id: todos.length + 1,
+        id: nextId.current,
         text,
         done: false,
       }
       setTodos([...todos, todo])
+      nextId.current++
     },
     [todos],
   )
