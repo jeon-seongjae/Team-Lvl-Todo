@@ -70,8 +70,9 @@ const Todos: React.FC = () => {
   }
 
   const onSubmitTodo = (todo: string) => {
+    const todoId = todos.length === 0 ? 1 : todos[todos.length - 1].id + 1
     let newTodo = {
-      id: todos[todos.length - 1].id + 1,
+      id: todoId,
       text: todo,
       completed: false,
     }
