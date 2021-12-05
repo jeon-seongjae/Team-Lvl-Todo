@@ -3,7 +3,10 @@ import CheckBox from '../common/CheckBox'
 import styled from 'styled-components'
 import {CgClose} from 'react-icons/cg'
 
-const Container = styled.div`
+const Container =
+  styled.div <
+  {completed: boolean} >
+  `
   width: 100%;
   height: 70px;
   padding: 0 0.5rem;
@@ -11,7 +14,7 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #d9d9d9;
   &:hover {
     .todo-delete-button-wrapper {
       display: flex;
@@ -20,7 +23,9 @@ const Container = styled.div`
 
   .todo-text {
     width: 100%;
-    margin-left: 1rem;
+    margin-left: 1rem; 
+    text-decoration: ${props => (props.completed ? 'line-through' : 'none')} 
+    
   }
   .todo-delete-button-wrapper {
     display: none;
@@ -30,7 +35,7 @@ const Container = styled.div`
     svg {
       width: 32px;
       height: 32px;
-      color: gray;
+      color: #d9d9d9;
     }
   }
 `
@@ -38,19 +43,25 @@ const Container = styled.div`
 interface IProps {
   text: string;
   completed: boolean;
-  onToggle?: () => void;
+  onToggle?: (id: number) => void;
+  onDelete?: (id: number) => void;
 }
 
-const Todo: React.FC<IProps> = ({text, completed = false, onToggle}) => {
+const Todo: React.FC<IProps> = ({
+  text,
+  completed = false,
+  onToggle,
+  onDelete,
+}) => {
   return (
-    <Container>
+    <Container completed={completed}>
       <CheckBox isChecked={completed} onClick={onToggle} />
       <div className="todo-text">{text}</div>
       <div className="todo-delete-button-wrapper">
-        <CgClose onClick={() => console.log('todo delete button.')} />
+        <CgClose onClick={onDelete} />
       </div>
     </Container>
   )
 }
 
-export default Todo
+export default React.memo(Todo)
