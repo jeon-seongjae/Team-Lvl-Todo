@@ -14,12 +14,12 @@ interface IProps {
 
 const InputComponent: React.FC<IProps> = ({label, color, size, ...props}) => {
   return (
-    <>
-      <Form.Label>{label}</Form.Label>
+    <div style={{width: '100%'}}>
+      {label && <Form.Label>{label}</Form.Label>}
       <Form.Control>
         <Form.Input {...props} />
       </Form.Control>
-    </>
+    </div>
   )
 }
 

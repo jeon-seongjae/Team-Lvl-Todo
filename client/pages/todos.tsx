@@ -16,4 +16,4 @@ const Todos: NextPage = () => {
   )
 }
 
-export default Todos
+export default todos

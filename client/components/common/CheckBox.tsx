@@ -5,7 +5,7 @@ import styled from 'styled-components'
 // * props 정의
 interface IProps {
   isChecked: boolean;
-  onClick?: () => void;
+  onClick?: (id: number) => void;
 }
 
 const Container =
@@ -25,10 +25,7 @@ const Container =
   }
 `
 
-const CheckBox: React.FC<IProps> = ({
-  isChecked = false,
-  onClick = () => console.log('CheckBox Clicked.'),
-}) => {
+const CheckBox: React.FC<IProps> = ({isChecked = false, onClick}) => {
   return (
     <Container isChecked={isChecked}>
       <div className="check-box-wrapper">
