@@ -1,12 +1,7 @@
 import {NextPage} from 'next'
-import CommonTest from '../components/common/CommonTest'
 
 const Home: NextPage = () => {
-  return (
-    <>
-      <CommonTest />
-    </>
-  )
+  return <h1>Home</h1>
 }
 
 export default Home

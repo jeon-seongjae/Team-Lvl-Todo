@@ -1,7 +1,7 @@
 import React from 'react'
-import {TabType} from '../../enums/todo2'
+import {TabType} from '../../enums/todo'
 import {Panel as BPanel} from 'react-bulma-components'
-import {TodoTab} from './'
+import {TodoTab} from '.'
 
 interface IProps {
   type: TabType

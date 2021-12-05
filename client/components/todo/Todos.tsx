@@ -1,99 +1,83 @@
-import React, {useState} from 'react'
-import Input from './Input'
-import Todo from './Todo'
-import styled from 'styled-components'
-
-let todolist = [
-  {id: 1, text: '타입스크립트 공부하기', completed: false},
-  {id: 2, text: '리액트 공부하기', completed: false},
-  {id: 3, text: 'Next 공부하기', completed: true},
-  {id: 4, text: '자바스크립트 공부하기', completed: true},
-]
-
-let Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 4rem;
-
-  h2 {
-    font-size: 70px;
-  }
-  .todos-wrapper {
-    width: 600px;
-    padding: 1rem 0;
-    border: 1px solid #d9d9d9;
-  }
-`
+import React, {useState, useRef, useCallback, useMemo} from 'react'
+import {ITodo} from '../../types/todo'
+import {TabType} from '../../enums/todo'
+import {Todo, TodoInput, TodoTabs} from '.'
+import {Panel as BPanel} from 'react-bulma-components'
 
 const Todos: React.FC = () => {
-  const [todos, setTodos] = useState(todolist)
+  const [todos, setTodos] = useState<ITodo[]>([])
+  const [tabType, setTabType] = useState(TabType.ALL)
+  const nextId = useRef(1)
 
-  const onToggleTodoCompleted = () => {
-    console.log('todo completed toggle button.')
-    let todosCompletedStatus = todos.map(todo => todo.completed)
-    console.log(todosCompletedStatus)
+  const handleAddTodo = useCallback(
+    (text: string) => {
+      if (text.trim().length <= 0) {
+        return
+      }
 
-    if (todosCompletedStatus.includes(false)) {
-      let newTodos = todos.map(function (todo) {
-        return {
-          id: todo.id,
-          text: todo.text,
-          completed: true,
-        }
-      })
-      setTodos(newTodos)
-    } else {
-      let newTodos = todos.map(function (todo) {
-        return {
-          id: todo.id,
-          text: todo.text,
-          completed: false,
-        }
-      })
-      setTodos(newTodos)
-    }
-  }
+      const todo: ITodo = {
+        id: nextId.current,
+        text,
+        done: false,
+      }
+      setTodos([...todos, todo])
+      nextId.current++
+    },
+    [todos],
+  )
 
-  const onToggleCompleted = (id: number) => {
-    let newTodos = todos.map(function (todo) {
-      return todo.id === id ? {...todo, completed: !todo.completed} : todo
+  const handleRemoveTodo = useCallback(
+    (todo: ITodo) => {
+      const filteredTodos = todos.filter(item => item.id !== todo.id)
+      setTodos(filteredTodos)
+    },
+    [todos],
+  )
+
+  const handleToggleTodo = (todo: ITodo) => {
+    const updatedTodos = todos.map(item => {
+      if (item === todo) {
+        return {...item, done: !item.done}
+      }
+
+      return item
     })
-    setTodos(newTodos)
+
+    setTodos(updatedTodos)
   }
 
-  const onDeleteTodo = (id: number) => {
-    let newTodos = todos.filter(todo => todo.id !== id)
-    setTodos(newTodos)
+  const handleClickTab = (type: TabType) => {
+    setTabType(type)
   }
 
-  const onSubmitTodo = (todo: string) => {
-    let newTodo = {
-      id: todos[todos.length - 1].id + 1,
-      text: todo,
-      completed: false,
+  const filteredTodos = useMemo(() => {
+    switch (tabType) {
+      case TabType.TODO:
+        return todos.filter(todo => todo.done === false)
+      case TabType.DONE:
+        return todos.filter(todo => todo.done === true)
     }
-    setTodos([...todos, newTodo])
-  }
+
+    return todos
+  }, [todos, tabType])
 
   return (
-    <Container>
-      <h2>Todos</h2>
-      <div className="todos-wrapper">
-        <Input onToggle={onToggleTodoCompleted} onSubmit={onSubmitTodo} />
-        {todos.map(todo => (
+    <BPanel color="primary">
+      <BPanel.Header>Todos</BPanel.Header>
+      <BPanel.Block>
+        <TodoInput handleAddTodo={handleAddTodo} />
+      </BPanel.Block>
+      <TodoTabs type={tabType} handleClickTab={handleClickTab} />
+      {filteredTodos.map(todo => (
+        <BPanel.Block key={todo.id}>
           <Todo
-            key={todo.id}
-            text={todo.text}
-            completed={todo.completed}
-            onToggle={() => onToggleCompleted(todo.id)}
-            onDelete={() => onDeleteTodo(todo.id)}
+            todo={todo}
+            handleRemoveTodo={handleRemoveTodo}
+            handleToggleTodo={handleToggleTodo}
           />
-        ))}
-      </div>
-    </Container>
+        </BPanel.Block>
+      ))}
+    </BPanel>
   )
 }
 

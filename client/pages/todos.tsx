@@ -1,10 +1,9 @@
 import type {NextPage} from 'next'
-import 'bulma/css/bulma.min.css'
 import {
   Section as BSection,
   Container as BContainer,
 } from 'react-bulma-components'
-import TodosApp from '../components/todo2/Todos'
+import TodosApp from '../components/todo/Todos'
 
 const Todos: NextPage = () => {
   return (
@@ -16,4 +15,4 @@ const Todos: NextPage = () => {
   )
 }
 
-export default todos
+export default Todos
