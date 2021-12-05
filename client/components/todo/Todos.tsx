@@ -1,6 +1,6 @@
 import React, {useState, useRef, useCallback, useMemo} from 'react'
-import {ITodo} from '../../types/todo'
-import {TabType} from '../../enums/todo'
+import {ITodo} from 'types/todo'
+import {TabType} from 'enums/todo'
 import {Todo, TodoInput, TodoTabs} from '.'
 import {Panel as BPanel} from 'react-bulma-components'
 

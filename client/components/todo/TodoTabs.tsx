@@ -1,5 +1,5 @@
 import React from 'react'
-import {TabType} from '../../enums/todo'
+import {TabType} from 'enums/todo'
 import {Panel as BPanel} from 'react-bulma-components'
 import {TodoTab} from '.'
 

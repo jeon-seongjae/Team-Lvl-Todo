@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button as BButton} from 'react-bulma-components'
 import {Form as BForm} from 'react-bulma-components'
-import {ITodo} from '../../types/todo'
+import {ITodo} from 'types/todo'
 
 interface IProps {
   todo: ITodo
