@@ -31,8 +31,8 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  login(email: string, password: string) {
+    return;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

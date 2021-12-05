@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,6 +22,10 @@ import {
 import { UserDto } from 'src/common/dto/user.dto';
 import { User } from 'src/common/decorators/user.decorator';
 import { undefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
+import { LoginDto } from './dto/login-user.dto';
+import { AuthService } from 'src/auth/auth.service';
+import { LocalAuthGuard } from 'src/auth/local-auth.Guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('USER')
@@ -35,12 +40,13 @@ export class UserController {
   }
 
   @ApiOkResponse({
-    type: UserDto,
+    // type: UserDto,
   })
   @ApiOperation({ summary: '내 정보 조회' })
+  @UseGuards(JwtAuthGuard)
   @Get()
   getUserInfo(@User() user) {
-    return this.userService.findOne(user);
+    return user;
   }
 
   @ApiOperation({ summary: '업데이트' })
@@ -57,11 +63,12 @@ export class UserController {
 
   @ApiOkResponse({
     description: '성공',
-    type: UserDto,
+    type: LoginDto,
   })
   @ApiOperation({ summary: '로그인' })
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@User() user) {
+  async login(@User() user) {
     return user;
   }
 
