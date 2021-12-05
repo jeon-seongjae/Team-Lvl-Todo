@@ -14,7 +14,7 @@
   "trailingComma": "all", 
   "useTabs": false,
   "vueIndentScriptAndStyle": true, 
-  "parser": "", 
+  "parser": "typescript", 
   "filepath": "",
   "requirePragma": false,
   "insertPragma": false,
