@@ -5,7 +5,7 @@ import {TodoTab} from './'
 
 interface IProps {
   type: TabType
-  handleClickTab: Function
+  handleClickTab: (type: TabType) => void
 }
 
 const TodoTabs: React.FC<IProps> = ({type, handleClickTab}) => {

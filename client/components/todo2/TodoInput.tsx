@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Form as BForm} from 'react-bulma-components'
 
 interface IProps {
-  handleAddTodo: Function
+  handleAddTodo: (text: string) => void
 }
 
 const Input: React.FC<IProps> = ({handleAddTodo}) => {

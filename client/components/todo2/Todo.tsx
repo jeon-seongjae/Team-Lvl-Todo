@@ -5,8 +5,8 @@ import {ITodo} from '../../types/todo2'
 
 interface IProps {
   todo: ITodo
-  handleRemoveTodo: Function
-  handleToggleTodo: Function
+  handleRemoveTodo: (todo: ITodo) => void
+  handleToggleTodo: (todo: ITodo) => void
 }
 
 const Todo: React.FC<IProps> = ({todo, handleRemoveTodo, handleToggleTodo}) => {

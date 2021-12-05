@@ -4,7 +4,7 @@ import {Panel as BPanel} from 'react-bulma-components'
 interface IProps {
   children: string
   active: boolean
-  handleClick: Function
+  handleClick: () => void
 }
 
 const TodoTab: React.FC<IProps> = ({children, active, handleClick}) => {
