@@ -1,11 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/entities/Users';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { getConnection, IsNull, Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -15,7 +12,9 @@ export class UserService {
   ) {}
 
   async createUser(email: string, nickname: string, password: string) {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({
+      where: { email: email, deleted: false },
+    });
     if (user) {
       throw new UnauthorizedException('이미 존재하는 사용자 입니다.');
     }
@@ -27,19 +26,27 @@ export class UserService {
     });
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async userInfo(nickname: string) {
+    const user = await this.usersRepository.findOne({
+      where: { nickname: nickname, deleted: false },
+      select: ['id', 'email', 'nickname'],
+    });
+    if (user) {
+      return user;
+    }
+    throw new UnauthorizedException('존재하지 않는 사용자 입니다.');
   }
 
-  login(email: string, password: string) {
-    return;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async userWithdrawal(nickname: string) {
+    const user = await this.usersRepository.findOne({
+      where: { nickname: nickname, deleted: false },
+      select: ['id', 'email', 'password', 'nickname'],
+    });
+    if (user) {
+      user.deleted = true;
+      await this.usersRepository.save(user);
+      return { message: '삭제가 완료되었습니다.' };
+    }
+    throw new UnauthorizedException('존재하지 않는 사용자 입니다.');
   }
 }
