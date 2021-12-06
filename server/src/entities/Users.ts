@@ -29,14 +29,14 @@ export class Users {
   @Column('varchar', { name: 'nickname', unique: true, length: 30 })
   nickname: string;
 
+  @Column('boolean', { name: 'deleted', default: false })
+  deleted: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date | null;
 
   @OneToMany(() => Todo, (todo) => todo.users)
   todo: Todo[];

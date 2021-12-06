@@ -27,17 +27,20 @@ export class Todo {
   @Column('varchar', { name: 'content', length: 100 })
   content: string;
 
-  @Column('varchar', { name: 'status', length: 30 })
-  status: string;
+  @Column('int', { name: 'status' })
+  status: number;
+
+  @Column('int', { name: 'UserId', nullable: true })
+  userId: number | null;
+
+  @Column('boolean', { name: 'deleted', default: false })
+  deleted: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date | null;
 
   @ManyToOne(() => Users, (users) => users.todo, {
     onDelete: 'SET NULL',

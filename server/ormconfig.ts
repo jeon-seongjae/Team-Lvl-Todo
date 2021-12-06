@@ -20,5 +20,4 @@ const config: TypeOrmModuleOptions = {
   logging: true,
   keepConnectionAlive: true,
 };
-
 export = config;

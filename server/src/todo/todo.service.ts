@@ -1,26 +1,78 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Todo } from 'src/entities/Todo';
+import { Users } from 'src/entities/Users';
+import { Repository } from 'typeorm';
+import { SelectTodoDto } from './dto/select-todo.dto';
 
 @Injectable()
 export class TodoService {
-  create(createTodoDto: CreateTodoDto) {
-    return 'This action adds a new todo';
+  constructor(
+    @InjectRepository(Todo)
+    private todoRepository: Repository<Todo>,
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
+  ) {}
+
+  async createTodo(
+    nickname: string,
+    title: string,
+    content: string,
+    status: number,
+  ) {
+    const user = await this.userRepository.findOne({
+      where: { nickname: nickname, deleted: false },
+    });
+    if (user) {
+      const todo = new Todo();
+      todo.title = title;
+      todo.content = content;
+      todo.status = status;
+      todo.userId = user.id;
+      await this.todoRepository.save(todo);
+      return;
+    }
   }
 
-  findAll() {
-    return `This action returns all todo`;
+  async findAllTodo(nickname: string) {
+    const user = await this.userRepository.findOne({
+      where: { nickname: nickname, deleted: false },
+    });
+    if (user) {
+      const allTodo = await this.todoRepository.find({
+        where: { userId: user.id },
+      });
+      return allTodo;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async findOneTodo(id: number) {
+    const selectTodo = await this.todoRepository.findOne({
+      where: { id: id, deleted: false },
+    });
+    if (selectTodo) {
+      return selectTodo;
+    }
+    throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+  async todoUpdate(updateTodoDto: SelectTodoDto) {
+    const todo = await this.todoRepository.findOne({
+      where: { id: updateTodoDto.id, deleted: false },
+    });
+    if (todo) {
+      todo.title = updateTodoDto.title;
+      todo.content = updateTodoDto.content;
+      todo.status = updateTodoDto.status;
+
+      await this.todoRepository.save(todo);
+      return { message: '업데이트가 완료되었습니다.' };
+    }
+    throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
+  async todoDelete(id: number) {
+    await this.todoRepository.delete({ id: id });
+    return { message: '삭제가 완료되었습니다.' };
   }
 }
