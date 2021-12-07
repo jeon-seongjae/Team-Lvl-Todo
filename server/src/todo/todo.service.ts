@@ -44,6 +44,7 @@ export class TodoService {
       });
       return allTodo;
     }
+    throw new UnauthorizedException('게시물이 존재하지 않습니다.');
   }
 
   async findOneTodo(id: number) {
