@@ -19,7 +19,7 @@ export class AuthService {
       select: ['id', 'email', 'password', 'nickname'], // 이렇게 하는 이유는 평소에 정보 불러올때 비밀번호 안넘어오게 하려고 entity설정에 select false옵션을 넣어 줬기 때문에
     }); // select 설정을 줘야 비밀번호 가져와진다.
     if (!user) {
-      return null;
+      return { message: '존재하지 않는 유저 입니다.' };
     }
     const result = await bcrypt.compare(password, user.password);
     if (result) {
@@ -29,6 +29,6 @@ export class AuthService {
 
       return { accessToken: accessToken };
     }
-    return null;
+    return { message: '비밀번호가 일치하지 않습니다.' };
   }
 }

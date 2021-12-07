@@ -30,7 +30,7 @@ export class TodoService {
       todo.status = status;
       todo.userId = user.id;
       await this.todoRepository.save(todo);
-      return;
+      return { message: '게시물 생성이 완료 되었습니다.' };
     }
   }
 
@@ -55,6 +55,19 @@ export class TodoService {
       return selectTodo;
     }
     throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
+  }
+
+  async filterTodo(status: number) {
+    const filterList = await this.todoRepository.find({
+      where: { status: status, deleted: false },
+    });
+    if (filterList) {
+      if (filterList.length === 0)
+        throw new UnauthorizedException(
+          `${status} 상태의 게시물이 존재하지 않습니다.`,
+        );
+      return filterList;
+    }
   }
 
   async todoUpdate(updateTodoDto: SelectTodoDto) {
