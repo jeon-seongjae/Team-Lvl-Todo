@@ -4,23 +4,16 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseGuards,
   Query,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import {
-  ApiOkResponse,
-  ApiOperation,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { SelectTodoDto } from './dto/select-todo.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @ApiTags('TODO')
 @Controller('todo')
@@ -63,6 +56,17 @@ export class TodoController {
   @Get('one')
   async findOneTodo(@Query('id') id: number) {
     return await this.todoService.findOneTodo(id);
+  }
+
+  @ApiOkResponse({
+    description: 'success',
+    type: SelectTodoDto,
+  })
+  @ApiOperation({ summary: '필터한 Todo 리스트' })
+  @UseGuards(JwtAuthGuard)
+  @Get('filter')
+  async filterTodo(@Query('status') status: number) {
+    return await this.todoService.filterTodo(status);
   }
 
   @ApiOkResponse({
