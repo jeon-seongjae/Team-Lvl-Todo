@@ -41,7 +41,11 @@ export class UserController {
   @ApiOperation({ summary: '회원가입' })
   @Post()
   async signUp(@Body() data: CreateUserDto) {
-    await this.userService.createUser(data.email, data.nickname, data.password);
+    return await this.userService.createUser(
+      data.email,
+      data.nickname,
+      data.password,
+    );
   }
 
   @ApiOkResponse({
