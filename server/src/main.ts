@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './httpException.filter';
+import cookieParser from 'cookie-parser';
 
 declare const module: any;
 
@@ -18,6 +19,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.use(cookieParser());
   app.use(helmet());
 
   const config = new DocumentBuilder()

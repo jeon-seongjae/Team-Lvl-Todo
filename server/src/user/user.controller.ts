@@ -28,6 +28,7 @@ import { LoginDto } from './dto/login-user.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.Guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TokenDto } from 'src/common/dto/token.dto';
+import { Token } from 'src/common/decorators/token.decorator';
 
 @UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('USER')
@@ -69,13 +70,33 @@ export class UserController {
   }
 
   @ApiOkResponse({
-    description: '성공',
-    type: TokenDto,
+    description: 'cookie에 AccessToken이란 이름으로 토큰이 전달 됩니다.',
   })
   @ApiOperation({ summary: '로그인' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@User() user, @Body() body: LoginDto) {
-    return await user;
+  async login(@User() user, @Token() Token, @Body() body: LoginDto) {
+    Token.cookie('accessToken', user.accessToken, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+    });
+    Token.cookie('refreshToken', user.refreshToken, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+    });
+
+    if (user.message) return user;
+
+    return;
   }
+
+  @ApiOkResponse({
+    description: 'cookie에 accessToken이란 이름으로 토큰이 전달 됩니다.',
+  })
+  @ApiOperation({ summary: '토큰 재발급' })
+  @UseGuards(JwtAuthGuard)
+  @Get('refreshToken')
+  async getRefreshToken(@User() user, @Token() Token) {}
 }

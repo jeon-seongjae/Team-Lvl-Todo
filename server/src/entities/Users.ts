@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -37,6 +38,10 @@ export class Users {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ nullable: true })
+  @Exclude()
+  refreshToken?: string;
 
   @OneToMany(() => Todo, (todo) => todo.users)
   todo: Todo[];

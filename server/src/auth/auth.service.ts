@@ -25,9 +25,14 @@ export class AuthService {
     if (result) {
       const makePaylosd = user.nickname;
       const payload = { makePaylosd };
-      const accessToken = this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+      const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
-      return { accessToken: accessToken };
+      user.refreshToken = refreshToken;
+
+      await this.usersRepository.save(user);
+
+      return { accessToken: accessToken, refreshToken: refreshToken };
     }
     return { message: '비밀번호가 일치하지 않습니다.' };
   }
