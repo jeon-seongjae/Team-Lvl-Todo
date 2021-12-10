@@ -23,10 +23,15 @@ export class AuthService {
     }
     const result = await bcrypt.compare(password, user.password);
     if (result) {
-      const makePaylosd = user.nickname;
-      const payload = { makePaylosd };
-      const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
-      const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+      const access = user.nickname;
+      const accessPayload = { access };
+      const refreshPayload = { refresh: access };
+      const accessToken = this.jwtService.sign(accessPayload, {
+        expiresIn: '1h',
+      });
+      const refreshToken = this.jwtService.sign(refreshPayload, {
+        expiresIn: '7d',
+      });
 
       user.refreshToken = refreshToken;
 
