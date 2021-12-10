@@ -8,5 +8,5 @@ export class TokenDto {
     example: 'Bearer test',
     description: 'AccessToken',
   })
-  accessToken;
+  refreshToken;
 }

@@ -29,6 +29,7 @@ import { LocalAuthGuard } from 'src/auth/local-auth.Guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TokenDto } from 'src/common/dto/token.dto';
 import { Token } from 'src/common/decorators/token.decorator';
+import { CheckHeader } from 'src/common/decorators/header.decorator';
 
 @UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('USER')
@@ -56,7 +57,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getUserInfo(@User() user) {
-    return await this.userService.userInfo(user.nickname);
+    return await this.userService.userInfo(user.nickname.access);
   }
 
   @ApiOkResponse({
@@ -93,10 +94,20 @@ export class UserController {
   }
 
   @ApiOkResponse({
-    description: 'cookie에 accessToken이란 이름으로 토큰이 전달 됩니다.',
+    description: 'cookie에 accessToken이란 이름으로 토큰이 재발급 됩니다.',
   })
   @ApiOperation({ summary: '토큰 재발급' })
-  @UseGuards(JwtAuthGuard)
   @Get('refreshToken')
-  async getRefreshToken(@User() user, @Token() Token) {}
+  async getRefreshToken(@Token() Token, @CheckHeader() head) {
+    if (head === null) return { message: 'refreshToken이 없습니다.' };
+    const accessToken = await this.userService.checkRefreshToken(
+      head.authorization.split(' ')[1],
+    );
+    Token.cookie('accessToken', accessToken, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+    });
+    return;
+  }
 }

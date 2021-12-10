@@ -9,12 +9,15 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 @Module({
   imports: [
     PassportModule,
     TypeOrmModule.forFeature([Users]),
     JwtModule.register({
-      secret: jwtConstants.secret,
+      secret: process.env.SECRET,
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
