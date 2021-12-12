@@ -30,7 +30,9 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TokenDto } from 'src/common/dto/token.dto';
 import { Token } from 'src/common/decorators/token.decorator';
 import { CheckHeader } from 'src/common/decorators/header.decorator';
+import { MorganInterceptor } from 'nest-morgan';
 
+@UseInterceptors(MorganInterceptor('common'))
 @UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('USER')
 @Controller('user')
