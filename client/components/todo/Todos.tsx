@@ -1,6 +1,7 @@
-import React, {useState, useRef, useCallback, useMemo} from 'react'
-import {ITodo} from 'types/todo'
+import React, {useState, useCallback, useEffect, useMemo} from 'react'
+import {TodoDto} from 'dtos/todo'
 import {TabType} from 'enums/todo'
+import {TodoApi} from 'api/todo'
 import {Todo, TodoInput, TodoTabs} from '.'
 import {Panel as BPanel} from 'react-bulma-components'
 
@@ -10,11 +11,21 @@ interface IProps {
 }
 
 const Todos: React.FC<IProps> = ({nickname, token}) => {
-  console.log(nickname, token)
-
-  const [todos, setTodos] = useState<ITodo[]>([])
+  const [todos, setTodos] = useState<TodoDto[]>([])
   const [tabType, setTabType] = useState(TabType.ALL)
-  const nextId = useRef(1)
+
+  useEffect(() => {
+    TodoApi.setToken(token)
+  }, [token])
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const todoDtos = await TodoApi.getTodos()
+      setTodos(todoDtos)
+    }
+
+    fetchTodos()
+  }, [])
 
   const handleAddTodo = useCallback(
     (text: string) => {
@@ -22,26 +33,26 @@ const Todos: React.FC<IProps> = ({nickname, token}) => {
         return
       }
 
-      const todo: ITodo = {
-        id: nextId.current,
+      const todo: TodoDto = {
         text,
         done: false,
       }
       setTodos([...todos, todo])
-      nextId.current++
+      TodoApi.addTodo(text)
     },
     [todos],
   )
 
   const handleRemoveTodo = useCallback(
-    (todo: ITodo) => {
-      const filteredTodos = todos.filter(item => item.id !== todo.id)
+    (todo: TodoDto) => {
+      const filteredTodos = todos.filter(item => item !== todo)
       setTodos(filteredTodos)
+      TodoApi.removeTodo(todo)
     },
     [todos],
   )
 
-  const handleToggleTodo = (todo: ITodo) => {
+  const handleToggleTodo = (todo: TodoDto) => {
     const updatedTodos = todos.map(item => {
       if (item === todo) {
         return {...item, done: !item.done}
@@ -75,8 +86,8 @@ const Todos: React.FC<IProps> = ({nickname, token}) => {
         <TodoInput handleAddTodo={handleAddTodo} />
       </BPanel.Block>
       <TodoTabs type={tabType} handleClickTab={handleClickTab} />
-      {filteredTodos.map(todo => (
-        <BPanel.Block key={todo.id}>
+      {filteredTodos.map((todo, index) => (
+        <BPanel.Block key={index}>
           <Todo
             todo={todo}
             handleRemoveTodo={handleRemoveTodo}
