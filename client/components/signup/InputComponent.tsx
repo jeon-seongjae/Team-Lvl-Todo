@@ -9,8 +9,8 @@ const errorMessageStyle = {
 }
 
 interface IProps {
-  label: 'ID' | 'Password' | 'Password Confirm'
-  type: 'text' | 'password'
+  label: 'ID' | 'Password' | 'Password Confirm' | 'Email' | 'Nickname'
+  type: 'text' | 'password' | 'email'
   placeholder?: string
   value: string
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void

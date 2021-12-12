@@ -1,16 +1,25 @@
 import React, {useState, useCallback, useMemo, useEffect} from 'react'
+import Link from 'next/link'
 import {useRouter} from 'next/router'
 import {Panel, Button} from 'react-bulma-components'
 import InputComponent from '../signup/InputComponent'
+import {signinAPI} from '../../api/register/register'
+
+const registerCheckStyle = {
+  margin: '0 auto',
+}
+const checkMessageStyle = {
+  margin: '0 auto',
+}
 
 const SigninForm: React.FC = () => {
   const router = useRouter()
-  const [id, setId] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [validateMode, setValidateMode] = useState(false)
 
-  const onChangeId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setId(event.target.value)
+  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
   }
 
   const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,20 +28,36 @@ const SigninForm: React.FC = () => {
 
   // * 입력받은 id, password, confirmPassword값이 유효한 값인지 체크
   const validateSignInForm = () => {
-    if (!id || !password) {
+    if (!email || !password) {
       return false
     }
 
     return true
   }
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setValidateMode(true)
 
     if (validateSignInForm()) {
       console.log('Sign In API Request')
-      router.push('/todos')
+      const signinBody = {
+        email,
+        password,
+      }
+
+      const {data} = await signinAPI(signinBody)
+
+      if (data.statusCode === 200) {
+        console.log('login 성공')
+        router.push('/todos')
+      } else {
+        alert('로그인에 실패했습니다. 에러 메시지를 확인하세요.')
+        // ! response.errorMessage 출력
+        // * setErrorMessage(response.errorMessage)
+        // * {errorMessage && (<p>{errorMessage}</p>)}
+        return
+      }
     } else {
       console.log('로그인중 에러가 발생했습니다.')
       return
@@ -49,13 +74,13 @@ const SigninForm: React.FC = () => {
       <Panel.Block>
         <form style={{width: '100%'}} onSubmit={onSubmit}>
           <InputComponent
-            label="ID"
-            type="text"
-            placeholder="ID"
-            value={id}
-            onChange={onChangeId}
-            errorMessage="ID를 입력해 주세요."
-            isValid={!!id}
+            label="Email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={onChangeEmail}
+            errorMessage="Email 주소를 입력해 주세요."
+            isValid={!!email}
             validateMode={validateMode}
           />
           <InputComponent
@@ -72,6 +97,15 @@ const SigninForm: React.FC = () => {
             <Button color="primary">로그인하기</Button>
           </Button.Group>
         </form>
+      </Panel.Block>
+      <Panel.Block>
+        <div className="register-check-wrapper" style={registerCheckStyle}>
+          <p style={checkMessageStyle}>
+            <Link href="/signup">
+              <a>회원가입하기</a>
+            </Link>
+          </p>
+        </div>
       </Panel.Block>
     </Panel>
   )
