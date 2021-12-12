@@ -3,6 +3,7 @@ import axios, {AxiosRequestConfig} from 'axios'
 
 const Axios = axios.create({
   baseURL: 'http://localhost:4000',
+  withCredentials: true,
 })
 
 interface LoginDto {
