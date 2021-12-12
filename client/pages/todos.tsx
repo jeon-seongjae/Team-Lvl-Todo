@@ -4,11 +4,9 @@ import {
   Container as BContainer,
 } from 'react-bulma-components'
 import TodosApp from '../components/todo/Todos'
-import {getUserAPI} from 'api/register/register'
+// import {getUserAPI} from 'api/register/register'
 
 const Todos: NextPage = ({data}) => {
-  console.log(data)
-
   return (
     <BSection>
       <BContainer breakpoint="desktop" max={true}>
@@ -27,8 +25,7 @@ const Todos: NextPage = ({data}) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  console.log('token : ', context.req.cookies)
-  const token = context.req.cookies.access_token
+  const token = context.req.cookies.accessToken
   let userData
   if (!token) {
     userData = null
