@@ -48,11 +48,11 @@ const SigninForm: React.FC = () => {
 
       const {data} = await signinAPI(signinBody)
 
-      if (data.statusCode === 200) {
+      if (data === 'OK') {
         console.log('login 성공')
         router.push('/todos')
       } else {
-        alert('로그인에 실패했습니다. 에러 메시지를 확인하세요.')
+        alert(data.message)
         // ! response.errorMessage 출력
         // * setErrorMessage(response.errorMessage)
         // * {errorMessage && (<p>{errorMessage}</p>)}
