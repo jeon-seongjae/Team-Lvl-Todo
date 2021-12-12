@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import * as ormconfig from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
+import { MorganModule } from 'nest-morgan';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     TodoModule,
     TypeOrmModule.forRoot(ormconfig),
+    MorganModule,
   ],
   controllers: [AppController],
   providers: [AppService],
