@@ -90,11 +90,12 @@ const SignupForm: React.FC = () => {
       }
       try {
         const {data} = await signupAPI(signupBody)
-        if (data.statusCode === 200) {
+
+        if (data === 'OK') {
           alert('회원가입에 성공했습니다. 로그인 페이지로 이동합니다.')
           router.push('/')
         } else {
-          alert('회원가입에 실패했습니다. 에러 메시지를 확인하세요.')
+          alert(data.data.message)
           // ! response.errorMessage 출력
           // * setErrorMessage(response.errorMessage)
           // * {errorMessage && (<p>{errorMessage}</p>)}
