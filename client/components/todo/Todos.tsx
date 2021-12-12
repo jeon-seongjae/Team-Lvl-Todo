@@ -4,7 +4,14 @@ import {TabType} from 'enums/todo'
 import {Todo, TodoInput, TodoTabs} from '.'
 import {Panel as BPanel} from 'react-bulma-components'
 
-const Todos: React.FC = () => {
+interface IProps {
+  nickname: string
+  token: string
+}
+
+const Todos: React.FC<IProps> = ({nickname, token}) => {
+  console.log(nickname, token)
+
   const [todos, setTodos] = useState<ITodo[]>([])
   const [tabType, setTabType] = useState(TabType.ALL)
   const nextId = useRef(1)
