@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -14,7 +15,11 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { SelectTodoDto } from './dto/select-todo.dto';
+import { MorganInterceptor } from 'nest-morgan';
+import { undefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
 
+@UseInterceptors(MorganInterceptor('common'))
+@UseInterceptors(undefinedToNullInterceptor)
 @ApiTags('TODO')
 @Controller('todo')
 export class TodoController {
@@ -29,7 +34,7 @@ export class TodoController {
   async createTodo(@User() user, @Body() createTodoData: CreateTodoDto) {
     const { title, content, status } = createTodoData;
     return await this.todoService.createTodo(
-      user.nickname,
+      user.nickname.access,
       title,
       content,
       status,
@@ -44,7 +49,7 @@ export class TodoController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAllTodo(@User() user) {
-    return await this.todoService.findAllTodo(user.nickname);
+    return await this.todoService.findAllTodo(user.nickname.access);
   }
 
   @ApiOkResponse({
