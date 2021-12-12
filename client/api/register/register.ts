@@ -26,7 +26,7 @@ export const refreshTokenAPI = () => Axios.get('/user/refreshToken')
 const refreshToken = async (
   config: AxiosRequestConfig,
 ): Promise<AxiosRequestConfig> => {
-  const accessToken = Cookie.get('access_token')
+  // const accessToken = Cookie.get('access_token')
   // token expires 만료시 refreshTokenApi();
   return config
 }
