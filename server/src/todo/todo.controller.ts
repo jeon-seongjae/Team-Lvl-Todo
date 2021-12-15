@@ -15,6 +15,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { SelectTodoDto } from './dto/select-todo.dto';
+import { FavoritesTodoDto } from './dto/favoritesId.dto';
 import { MorganInterceptor } from 'nest-morgan';
 import { undefinedToNullInterceptor } from 'src/common/interceptors/undefinedToNull.interceptor';
 
@@ -75,6 +76,16 @@ export class TodoController {
   }
 
   @ApiOkResponse({
+    description: '즐겨찾기 추가!',
+  })
+  @ApiOperation({ summary: '즐겨찾기 추가' })
+  @UseGuards(JwtAuthGuard)
+  @Patch('favorites')
+  async addFavorites(@Body() favoritesId: FavoritesTodoDto) {
+    return await this.todoService.todoAddFavorites(favoritesId);
+  }
+
+  @ApiOkResponse({
     description: '수정이 완료 되었습니다.',
   })
   @ApiOperation({ summary: 'Todo 정보 수정' })
@@ -90,7 +101,7 @@ export class TodoController {
   @ApiOperation({ summary: 'Todo 삭제' })
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
-  async remove(@Body('id') id: number) {
+  async remove(@Body() id: FavoritesTodoDto) {
     return await this.todoService.todoDelete(id);
   }
 }

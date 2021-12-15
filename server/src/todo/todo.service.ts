@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from 'src/entities/Todo';
 import { Users } from 'src/entities/Users';
 import { Repository } from 'typeorm';
+import { FavoritesTodoDto } from './dto/favoritesId.dto';
 import { SelectTodoDto } from './dto/select-todo.dto';
 
 @Injectable()
@@ -70,6 +71,19 @@ export class TodoService {
     }
   }
 
+  async todoAddFavorites(favoritesId: FavoritesTodoDto) {
+    const todo = await this.todoRepository.findOne({
+      where: { id: favoritesId, deleted: false },
+    });
+    if (todo) {
+      todo.favorites = true;
+
+      await this.todoRepository.save(todo);
+      return { message: '즐겨찾기 추가!' };
+    }
+    throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
+  }
+
   async todoUpdate(updateTodoDto: SelectTodoDto) {
     const todo = await this.todoRepository.findOne({
       where: { id: updateTodoDto.id, deleted: false },
@@ -85,8 +99,16 @@ export class TodoService {
     throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
   }
 
-  async todoDelete(id: number) {
-    await this.todoRepository.delete({ id: id });
-    return { message: '삭제가 완료되었습니다.' };
+  async todoDelete(id: FavoritesTodoDto) {
+    const todo = await this.todoRepository.findOne({
+      where: { id: id, deleted: false },
+    });
+    if (todo) {
+      todo.deleted = true;
+
+      await this.todoRepository.save(todo);
+      return { message: '삭제가 완료 되었습니다.' };
+    }
+    throw new UnauthorizedException('존재하지 않는 게시물 입니다.');
   }
 }
