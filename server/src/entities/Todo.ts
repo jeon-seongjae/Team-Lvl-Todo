@@ -30,6 +30,9 @@ export class Todo {
   @Column('int', { name: 'status' })
   status: number;
 
+  @Column('boolean', { name: 'favorites', default: false })
+  favorites: boolean;
+
   @Column('int', { name: 'UserId', nullable: true })
   userId: number | null;
 
